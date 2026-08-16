@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeZim — Find Your Home in Zimbabwe</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f8fa;
+      color: #18212f;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    /* NAVIGATION */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e8eaed;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      color: #176b45;
+    }
+
+    .logo span {
+      color: #e0a800;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 600;
+      color: #46505c;
+    }
+
+    .nav-links a:hover {
+      color: #176b45;
+    }
+
+    .login-btn {
+      border: 1px solid #176b45;
+      color: #176b45 !important;
+      padding: 9px 16px;
+      border-radius: 8px;
+    }
+
+    .register-btn {
+      background: #176b45;
+      color: white !important;
+      padding: 10px 17px;
+      border-radius: 8px;
+    }
+
+    .menu-btn {
+      display: none;
+      border: none;
+      background: transparent;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .hero {
+      background:
+        linear-gradient(rgba(10, 45, 30, .78), rgba(10, 45, 30, .78)),
+        url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=80")
+        center/cover;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 60px 20px;
+      color: white;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(38px, 6vw, 65px);
+      max-width: 720px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 18px;
+      max-width: 600px;
+      color: #e6eee9;
+      margin-bottom: 35px;
+    }
+
+    /* SEARCH */
+    .search-box {
+      background: white;
+      padding: 10px;
+      border-radius: 13px;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr auto;
+      gap: 10px;
+      box-shadow: 0 12px 35px rgba(0,0,0,.2);
+    }
+
+    .search-field {
+      padding: 5px;
+    }
+
+    .search-field label {
+      display: block;
+      color: #68717d;
+      font-size: 12px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .search-field select,
+    .search-field input {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: #1c2733;
+      background: transparent;
+      font-size: 15px;
+      padding: 5px 0;
+    }
+
+    .search-btn {
+      border: none;
+      background: #e0a800;
+      color: #171717;
+      padding: 0 28px;
+      border-radius: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .search-btn:hover {
+      background: #c99400;
+    }
+
+    /* GENERAL */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 70px 20px;
+    }
+
+    .section-heading {
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .section-heading p {
+      color: #68717d;
+    }
+
+    /* PROPERTY CARDS */
+    .houses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .house-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #e7e9ec;
+      transition: .2s;
+    }
+
+    .house-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    }
+
+    .house-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .house-body {
+      padding: 18px;
+    }
+
+    .house-location {
+      color: #176b45;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .house-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .house-description {
+      color: #69727d;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .house-info {
+      display: flex;
+      gap: 14px;
+      color: #606975;
+      font-size: 13px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .house-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: 800;
+      color: #176b45;
+    }
+
+    .price small {
+      font-size: 12px;
+      color: #737b85;
+      font-weight: normal;
+    }
+
+    .view-btn {
+      background: #176b45;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .view-btn:hover {
+      background: #125a39;
+    }
+
+    /* HOW IT WORKS */
+    .how-section {
+      background: white;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .step {
+      padding: 25px;
+      border: 1px solid #e7e9ec;
+      border-radius: 13px;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8f3ed;
+      color: #176b45;
+      border-radius: 50%;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .step h3 {
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      color: #69727d;
+      font-size: 14px;
+    }
+
+    /* LANDLORD CTA */
+    .landlord {
+      background: #176b45;
+      color: white;
+      border-radius: 18px;
+      padding: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .landlord h2 {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .landlord p {
+      color: #dcebe3;
+      max-width: 600px;
+    }
+
+    .list-btn {
+      background: #e0a800;
+      color: #151515;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .list-btn:hover {
+      background: #c99400;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #101914;
+      color: white;
+      padding: 45px 20px 25px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 35px;
+    }
+
+    .footer-brand p {
+      color: #9ca8a1;
+      max-width: 400px;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .footer-column h4 {
+      margin-bottom: 15px;
+    }
+
+    .footer-column a {
+      display: block;
+      color: #9ca8a1;
+      font-size: 14px;
+      margin-bottom: 9px;
+    }
+
+    .copyright {
+      border-top: 1px solid #28312c;
+      padding-top: 20px;
+      color: #88938c;
+      font-size: 13px;
+    }
+
+    /* NO RESULTS */
+    .no-results {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      color: #68717d;
+      display: none;
+    }
+
+    /* MOBILE */
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 20px;
+        flex-direction: column;
+        align-items: stretch;
+        border-bottom: 1px solid #eee;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .search-box {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .search-btn {
+        padding: 14px;
+      }
+
+      .houses-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .landlord {
+        padding: 30px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <nav class="navbar">
+    <a href="index.html" class="logo">Home<span>Zim</span></a>
+
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="#houses">Find a House</a>
+      <a href="list-house.html">List Your House</a>
+      <a href="login.html" class="login-btn">Login</a>
+      <a href="register.html" class="register-btn">Register</a>
+    </div>
+  </nav>
+</header>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+
+    <h1>Find Your Next Home in Zimbabwe 🇿🇼</h1>
+
+    <p>
+      Discover houses and apartments for rent across Zimbabwe.
+      Search by location and budget to find a place that fits you.
+    </p>
+
+    <div class="search-box">
+
+      <div class="search-field">
+        <label>LOCATION</label>
+
+        <select id="location">
+          <option value="">Anywhere in Zimbabwe</option>
+          <option value="Harare">Harare</option>
+          <option value="Bulawayo">Bulawayo</option>
+          <option value="Mutare">Mutare</option>
+          <option value="Gweru">Gweru</option>
+          <option value="Masvingo">Masvingo</option>
+          <option value="Chitungwiza">Chitungwiza</option>
+          <option value="Marondera">Marondera</option>
+          <option value="Kwekwe">Kwekwe</option>
+        </select>
+      </div>
+
+      <div class="search-field">
+        <label>MAXIMUM MONTHLY RENT</label>
+
+        <input
+          type="number"
+          id="budget"
+          placeholder="e.g. 400"
+          min="0"
+        >
+      </div>
+
+      <button class="search-btn" onclick="searchHouses()">
+        Search Houses
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- HOUSES -->
+<section class="container" id="houses">
+
+  <div class="section-heading">
+    <h2>Featured Houses</h2>
+    <p>Explore some of the latest homes available for rent.</p>
+  </div>
+
+  <div class="houses-grid" id="housesGrid"></div>
+
+  <div class="no-results" id="noResults">
+    <h3>No houses found</h3>
+    <p>Try changing your location or increasing your budget.</p>
+  </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+
+    <div class="section-heading">
+      <h2>How HomeZim Works</h2>
+      <p>Finding a home doesn't have to be complicated.</p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Choose Your Location</h3>
+        <p>
+          Select the city or location where you want to find a house.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Find Your House</h3>
+        <p>
+          Browse available properties and filter them according to your budget.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Contact the Owner</h3>
+        <p>
+          View the property details and contact the owner when you find the right home.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- LANDLORD CTA -->
+<section class="container" id="list-house">
+
+  <div class="landlord">
+
+    <div>
+      <h2>Have a House to Rent?</h2>
+
+      <p>
+        List your property on HomeZim and reach people searching
+        for homes across Zimbabwe. Property listings will cost
+        just $2 per listing.
+      </p>
+    </div>
+
+    <a href="login.html" class="list-btn">
+      List Your House →
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+  <div class="footer-inner">
+
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <div class="logo">Home<span>Zim</span></div>
+
+        <p>
+          A simple way to discover houses for rent across Zimbabwe.
+          Find your next home or list your property with us.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h4>Explore</h4>
+        <a href="#houses">Find a House</a>
+        <a href="list-house.html">List Your House</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>Information</h4>
+        <a href="#">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 HomeZim. Built for Zimbabwe 🇿🇼
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script src="js/data.js"></script>
+
+<script>
+
+  /* DISPLAY HOUSES */
+
+  function displayHouses(list) {
+
+    const grid = document.getElementById("housesGrid");
+    const noResults = document.getElementById("noResults");
+
+    grid.innerHTML = "";
+
+    if (list.length === 0) {
+      noResults.style.display = "block";
+      return;
+    }
+
+    noResults.style.display = "none";
+
+    list.forEach(house => {
+
+      const card = document.createElement("div");
+
+      card.className = "house-card";
+
+      card.innerHTML = `
+        <img
+          class="house-image"
+          src="${house.images[0]}"
+          alt="${house.title}"
+        >
+
+        <div class="house-body">
+
+          <div class="house-location">
+            📍 ${house.area}, ${house.location}
+          </div>
+
+          <h3 class="house-title">
+            ${house.title}
+          </h3>
+
+          <p class="house-description">
+            ${house.description}
+          </p>
+
+          <div class="house-info">
+            <span>🛏 ${house.bedrooms} Beds</span>
+            <span>🚿 ${house.bathrooms} Baths</span>
+          </div>
+
+          <div class="house-bottom">
+
+            <div class="price">
+              $${house.rent}
+              <small>/month</small>
+            </div>
+
+            <button
+              class="view-btn"
+              onclick="viewHouse(${house.id})"
+            >
+              View House
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+      grid.appendChild(card);
+
+    });
+  }
+
+
+  /* SEARCH */
+
+  function searchHouses() {
+
+    const location =
+      document.getElementById("location").value;
+
+    const budget =
+      Number(document.getElementById("budget").value);
+
+    const filtered = houses.filter(house => {
+
+      const locationMatch =
+        !location || house.location === location;
+
+      const budgetMatch =
+        !budget || house.rent <= budget;
+
+      return locationMatch && budgetMatch;
+
+    });
+
+    displayHouses(filtered);
+
+    document
+      .getElementById("houses")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+  }
+
+
+  /* VIEW PROPERTY — now opens house.html */
+
+  function viewHouse(id) {
+    window.location.href = "house.html?id=" + id;
+  }
+
+
+  /* MOBILE MENU */
+
+  function toggleMenu() {
+
+    document
+      .getElementById("navLinks")
+      .classList.toggle("active");
+
+  }
+
+
+  /* INITIAL LOAD */
+
+  displayHouses(houses);
+
+</script>
+
+</body>
+</html>
