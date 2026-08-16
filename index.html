@@ -1,16 +1,300 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zim Accommodation | Find Rental Houses in Zimbabwe</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#F8FAFC] text-slate-800 antialiased font-sans">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeZim — Find Your Next Home in Zimbabwe 🇿🇼</title>
+  
+  <!-- Pure Vanilla CSS (No Frameworks, Works offline in TrebEdit) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+  <!-- =========================================================================
+       1. NAVIGATION BAR
+       ========================================================================= -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <!-- Brand Logo -->
+        <a href="index.html" class="logo" id="brand-logo">
+          <span>🏠 HomeZim</span>
+          <span class="logo-badge">🇿🇼 ZW</span>
+        </a>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Navigation Links -->
+        <div class="nav-menu" id="navMenu">
+          <a href="#featured-properties" class="active">Home</a>
+          <a href="#featured-properties">Find a House</a>
+          <a href="#landlord-section" class="nav-btn-list">List Your House ($2)</a>
+          <a href="/api/download-zip" class="nav-btn-download" title="Download pure TrebEdit project ZIP">⬇️ Download ZIP</a>
+          <a href="#" onclick="alert('Login & User accounts will be enabled in Phase 2.'); return false;">Login</a>
+          <a href="#" onclick="alert('Registration will be enabled in Phase 2.'); return false;">Register</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- =========================================================================
+         2. HERO SECTION WITH SEARCH PANEL
+         ========================================================================= -->
+    <section class="hero" id="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>🇿🇼</span> Zimbabwe's Trusted Property Marketplace
+          </div>
+          <h1>Find Your Next Home in Zimbabwe 🇿🇼</h1>
+          <p class="hero-text">
+            Discover verified houses, townhouses, and cottages for rent across Harare, Bulawayo, Mutare, Gweru, and major towns.
+          </p>
+
+          <!-- Interactive Search Box -->
+          <div class="search-panel" id="search-panel">
+            <form class="search-form" id="searchForm">
+              <!-- Location Dropdown -->
+              <div class="form-group">
+                <label for="locationSelect">Location</label>
+                <select id="locationSelect" class="form-control">
+                  <option value="all">Anywhere in Zimbabwe</option>
+                  <option value="Harare">Harare</option>
+                  <option value="Bulawayo">Bulawayo</option>
+                  <option value="Mutare">Mutare</option>
+                  <option value="Gweru">Gweru</option>
+                  <option value="Masvingo">Masvingo</option>
+                  <option value="Chitungwiza">Chitungwiza</option>
+                  <option value="Marondera">Marondera</option>
+                  <option value="Kwekwe">Kwekwe</option>
+                </select>
+              </div>
+
+              <!-- Budget Input -->
+              <div class="form-group">
+                <label for="budgetInput">Budget (Max USD $)</label>
+                <input 
+                  type="number" 
+                  id="budgetInput" 
+                  class="form-control" 
+                  placeholder="e.g. 400" 
+                  min="50" 
+                  step="10" 
+                />
+              </div>
+
+              <!-- Search Submit Button -->
+              <button type="submit" class="btn-search" id="searchBtn">
+                <span>🔍</span> Find Houses
+              </button>
+            </form>
+
+            <!-- Quick City Filter Chips -->
+            <div class="quick-cities">
+              <span>Popular cities:</span>
+              <button type="button" class="city-chip" onclick="quickFilterCity('Harare')">Harare</button>
+              <button type="button" class="city-chip" onclick="quickFilterCity('Bulawayo')">Bulawayo</button>
+              <button type="button" class="city-chip" onclick="quickFilterCity('Mutare')">Mutare</button>
+              <button type="button" class="city-chip" onclick="quickFilterCity('Gweru')">Gweru</button>
+              <button type="button" class="city-chip" onclick="quickFilterCity('Chitungwiza')">Chitungwiza</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         3. FEATURED PROPERTIES SECTION
+         ========================================================================= -->
+    <section class="section" id="featured-properties">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <div>
+              <h2 class="section-title">Featured Houses</h2>
+              <p class="section-subtitle">Verified rental listings updated daily across Zimbabwe</p>
+            </div>
+            <div class="filter-status" id="filterStatus">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Property Grid Container (Populated dynamically via js/app.js) -->
+        <div class="properties-grid" id="propertiesGrid">
+          <!-- Rendered by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         4. HOW IT WORKS SECTION
+         ========================================================================= -->
+    <section class="section bg-light" id="how-it-works">
+      <div class="container">
+        <div class="section-header" style="text-align: center; max-width: 600px; margin: 0 auto 2.5rem;">
+          <h2 class="section-title">How HomeZim Works</h2>
+          <p class="section-subtitle">Simple, transparent, and direct renting for all Zimbabweans</p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Choose your location</h3>
+            <p>Select the town or neighborhood in Zimbabwe where you want to live and set your monthly budget.</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Find your house</h3>
+            <p>Browse available verified properties, compare rental prices, check borehole/solar amenities, and view photos.</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Contact the owner</h3>
+            <p>Connect directly with property owners and landlords without paying exorbitant middleman agent fees.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         5. LANDLORD CTA SECTION
+         ========================================================================= -->
+    <section class="container" id="landlord-section">
+      <div class="landlord-section">
+        <span class="landlord-badge">$2 per property listing</span>
+        <h2>Have a House to Rent?</h2>
+        <p>
+          List your property on HomeZim and reach thousands of verified renters searching for homes across Harare, Bulawayo, Mutare, and nationwide.
+        </p>
+        <a href="#" class="btn-gold" id="btnListHouseCta" onclick="alert('Landlord property listing and $2 payment system will be activated in Phase 2.'); return false;">
+          List Your House
+        </a>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         6. WHY HOMEZIM SECTION
+         ========================================================================= -->
+    <section class="section" id="why-homezim">
+      <div class="container">
+        <div class="section-header" style="text-align: center; max-width: 600px; margin: 0 auto 2.5rem;">
+          <h2 class="section-title">Why Choose HomeZim?</h2>
+          <p class="section-subtitle">Built from the ground up for Zimbabwean renters and landlords</p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Benefit 1 -->
+          <div class="feature-box">
+            <div class="feature-box-icon">📍</div>
+            <h3>Location-focused</h3>
+            <p>Find properties in the exact Zimbabwean suburbs and low/medium/high density areas you want to live.</p>
+          </div>
+
+          <!-- Benefit 2 -->
+          <div class="feature-box">
+            <div class="feature-box-icon">💰</div>
+            <h3>Budget-friendly search</h3>
+            <p>Search houses in USD ($) that match your real monthly budget with zero hidden surprise charges.</p>
+          </div>
+
+          <!-- Benefit 3 -->
+          <div class="feature-box">
+            <div class="feature-box-icon">🏠</div>
+            <h3>Real property listings</h3>
+            <p>Inspect authentic property details, water backup (borehole/tank), solar status, and photos.</p>
+          </div>
+
+          <!-- Benefit 4 -->
+          <div class="feature-box">
+            <div class="feature-box-icon">🇿🇼</div>
+            <h3>Built for Zimbabwe</h3>
+            <p>Tailored specifically for local market realities, local cities, and direct landlord connections.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       7. PROPERTY DETAIL PREVIEW MODAL
+       ========================================================================= -->
+  <div class="modal-overlay" id="propertyModal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Property Details</h3>
+        <button class="btn-close-modal" id="closeModalBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-contact-sim" onclick="alert('Contacting landlord and direct messaging will be available in Phase 2.');">
+          📞 Contact Landlord (Phase 2)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       8. FOOTER
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">🏠 HomeZim 🇿🇼</div>
+          <p class="footer-description">
+            Zimbabwe's premier residential rental marketplace. Connecting renters with genuine landlords across all 10 provinces.
+          </p>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Explore</h4>
+          <ul class="footer-links-list">
+            <li><a href="#featured-properties">Home</a></li>
+            <li><a href="#featured-properties">Find a House</a></li>
+            <li><a href="#landlord-section">List Your House</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Account & Legal</h4>
+          <ul class="footer-links-list">
+            <li><a href="#" onclick="alert('Login page in Phase 2'); return false;">Login</a></li>
+            <li><a href="#" onclick="alert('Register page in Phase 2'); return false;">Register</a></li>
+            <li><a href="#" onclick="alert('About HomeZim page in Phase 2'); return false;">About</a></li>
+            <li><a href="#" onclick="alert('Terms & Privacy in Phase 2'); return false;">Privacy & Terms</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 HomeZim. All rights reserved.</p>
+        <p>Built with pure HTML5, CSS3, and Vanilla JavaScript 🇿🇼</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Instant ZIP Download Button for TrebEdit -->
+  <a href="/api/download-zip" class="floating-zip-btn" id="floatingZipBtn" title="Download HomeZim.zip for TrebEdit">
+    <span class="zip-icon">⬇️</span>
+    <span class="zip-text">Download HomeZim.zip</span>
+  </a>
+
+  <!-- Pure Vanilla JavaScript (No Build Tools Required) -->
+  <script src="js/app.js"></script>
+</body>
+</html>
